@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create Table</title>
+	 <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<style>
+		 .dynamicTable { 
+		 	  font:.7em Arial;
+		 	 border:1px solid gray;
+		 	 }
+        .dynamicTableTh {
+         background-color:#584df0;
+          color:white;
+      }
+        .dynamicTableTd {
+         padding:3px; 
+         width:90px; 
+         color:lightblue;
+     }
+	</style>
+</head>
+
+ <body class="bg-dark">
+ <div class="container-fluid">
+	<div class="container">
+      <h1 class="mt-5 text-center text-primary">Display Data To A Table</h1>
+
+	<div class="row formdata mt-5">
+		<div class="col-6">
+			<div class="form-group">
+				<label for="name" class="text-white">First Name</label>
+		        <input type="text" class="form-control" name="fname" id="fname" autocomplete="off">
+            <input type="hidden" id="id"/>
+		</div>
+	</div>
+		<div class="col-6">
+			<div class="form-group">
+				<label for="name" class="text-white">Last Name</label>
+		        <input type="text" class="form-control" name="lname" id="lname" autocomplete="off">
+		</div>
+	</div>
+		<div class="col-6">
+			<div class="form-group">
+				<label for="name" class="text-white">Age</label>
+		        <input type="text" class="form-control " name="age" id="age" autocomplete="off">
+		</div>
+	</div>
+		<div class="col-6">
+			<div class="form-group">
+		        <button type="submit" class="form-control btn-block btn-lg btn-primary mt-4"  name="sub" value="submit" onclick="insertTable()">Submit</button>
+		</div>
+	</div>
+</div>
+  
+ <table class="table table-bordered bg-danger text-white text-center mt-5">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</th>
+        <th>Update/Delete</th>
+      </tr>
+    </thead>
+     <tbody id="displayArea">
+     </tbody>
+  </table>
+ 
+</div>
+</div>
+
+
+
+<script>
+var nameArray = [];
+
+// function addTable(){
+//   var nameObj = {
+//     "fname":$('#fname').val(),
+//     "lname":$('#lname').val(),
+//     "age":$('#age').val(),
+//   }
+//   nameArray.push(nameObj);
+//   renderHtml();
+//   $("input[type=text]").val("");
+// }
+
+// function renderHtml(){
+//   $('#displayArea').empty();
+//   for(i = 0; i < nameArray.length; i++){
+//     var nameObj = nameArray[i];
+//       $('#displayArea').append("<tr id='row"+i+"'><td>" + nameObj.fname + "</td><td>" + nameObj.lname + "</td><td>" + nameObj.age  + "</td><td><span class='editrow' style='cursor:pointer'><a class='fa fa-edit' onclick ='edit("+nameObj.id+");' >Edit</a></span><span><button onclick='deleteRow("+nameObj.id+");' class='material-icons'style='font-size:30px;color:red;margin-left:30px;cursor:pointer;'>delete</button></span></td></tr>");
+//   }
+// }
+var primaryKey = 1;
+
+function insertTable(){
+  var id = $('#id').val();
+
+  if(null != id && id != ""){
+     for(i = 0; i < nameArray.length; i++){
+      var obj = nameArray[i];
+      if(obj.id == id){      
+        obj.fname = $('#fname').val();
+        obj.lname = $('#lname').val();
+        obj.age = $('#age').val();      
+        nameArray[i] = obj;
+       
+        addTable();
+        $('input[type=text]').val("");
+    }
+  }
+  }else{
+     var input = $('input').val();
+   if(input != null && input != ""){
+    var nameObj = {
+           "id" : primaryKey,
+           "fname": $('#fname').val(),
+           "lname": $('#lname').val(),
+           "age": $('#age').val(),
+         }
+         nameArray.push(nameObj);
+         addTable();
+         primaryKey++;
+         $('input[type=text]').val("");
+  }
+}
+}
+
+function addTable(){
+  $('#displayArea').empty();
+    for(i = 0; i < nameArray.length; i++){
+      var nameObj = nameArray[i];
+       $('#displayArea').append("<tr id='row"+i+"'><td>" + nameObj.fname + "</td><td>" + nameObj.lname + "</td><td>" + nameObj.age  + "</td><td><span class='editrow' style='cursor:pointer'><a class='fa fa-edit' onclick ='edit("+nameObj.id+");' >Edit</a></span><span><a onclick='deleteRow("+nameObj.id+");' class='material-icons'style='font-size:30px;color:red;margin-left:30px;cursor:pointer;'>delete</a></span></td></tr>");
+    }
+}
+ function edit(id){
+  for(i = 0; i < nameArray.length; i++){
+    var obj = nameArray[i];
+    if(obj.id == id){
+       $('#id').val(obj.id); 
+      $('#fname').val(obj.fname);
+      $('#lname').val(obj.lname); 
+      $('#age').val(obj.age); 
+    }
+  }
+}
+function deleteRow(id){
+      var emptyArray  = [];
+     for(i = 0; i < nameArray.length; i++){
+      var obj = nameArray[i];
+      if(obj.id != id){           
+      emptyArray.push(obj);  
+    }   
+  }
+  nameArray= emptyArray;
+  addTable();
+}
+</script>
+
+</body>
+</html>
